@@ -1,6 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
+import { QuevexLogo } from "./QuevexLogo";
+
+const BrandCapsule = ({ children }) => {
+  return (
+    <div
+      style={{
+        backgroundColor: "#ffffff", // Pure white for max contrast
+        padding: "8px 16px", // Breathing room for the logo
+        borderRadius: "50px", // The "Pill" shape
+        display: "inline-flex", // Shrinks to fit the content
+        alignItems: "center",
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)", // Subtle shadow to lift it off the blue
+        border: "1px solid #e2e8f0", // Clean edge
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 const Dashboard = () => {
   const [boards, setBoards] = useState([]);
@@ -39,7 +58,7 @@ const Dashboard = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("Projexis_user");
+    localStorage.removeItem("Quevex_user");
     navigate("/login");
   };
 
@@ -81,6 +100,18 @@ const Dashboard = () => {
           paddingBottom: "24px",
         }}
       >
+        {/* Clean, prominent header alignment */}
+        <header
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <BrandCapsule>
+            <QuevexLogo size={50} />{" "}
+            {/* Slightly reduced size to fit beautifully inside the capsule */}
+          </BrandCapsule>
+        </header>
         <h1
           style={{
             margin: 0,
@@ -90,7 +121,7 @@ const Dashboard = () => {
             letterSpacing: "-0.05em",
           }}
         >
-          🚀 Projexis Workspaces
+          Quevex Workspaces
         </h1>
         <button
           onClick={handleLogout}

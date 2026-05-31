@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
+import { QuevexLogo } from "./QuevexLogo";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,11 +17,7 @@ const Login = () => {
 
     try {
       const response = await API.post("/auth/login", { email, password });
-
-      // Save user details + token string to localStorage
-      localStorage.setItem("Projexis_user", JSON.stringify(response.data));
-
-      // Send them straight to the main board workspace view
+      localStorage.setItem("Quevex_user", JSON.stringify(response.data));
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid email or password.");
@@ -33,13 +30,21 @@ const Login = () => {
     <div
       style={{
         display: "flex",
+        flexDirection: "column", // Stack elements vertically
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
         backgroundColor: "#f4f5f7",
         fontFamily: "sans-serif",
+        padding: "20px",
       }}
     >
+      {/* 1. Logo at the Top */}
+      <div style={{ marginBottom: "40px" }}>
+        <QuevexLogo size={140} />
+      </div>
+
+      {/* 2. Login Form Card */}
       <div
         style={{
           backgroundColor: "#ffffff",
@@ -59,7 +64,7 @@ const Login = () => {
             fontSize: "1.75rem",
           }}
         >
-          Projexis
+          Welcome Back
         </h2>
         <p
           style={{
@@ -69,7 +74,7 @@ const Login = () => {
             marginBottom: "24px",
           }}
         >
-          Log in to your workspace
+          Log in to your Quevex workspace
         </p>
 
         {error && (
@@ -106,7 +111,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="e.g. alex@example.com"
+              placeholder="alex@example.com"
               style={{
                 width: "100%",
                 padding: "10px",
@@ -162,10 +167,9 @@ const Login = () => {
               fontSize: "1rem",
               fontWeight: "600",
               cursor: "pointer",
-              transition: "background-color 0.2s",
             }}
           >
-            {loading ? "Logging in..." : "Log In"}
+            {loading ? "Verifying..." : "Log In"}
           </button>
         </form>
 
@@ -177,7 +181,7 @@ const Login = () => {
             color: "#5e6c84",
           }}
         >
-          Don't have an account?{" "}
+          New to Quevex?{" "}
           <Link
             to="/register"
             style={{
@@ -186,7 +190,7 @@ const Login = () => {
               fontWeight: "600",
             }}
           >
-            Sign up
+            Create an account
           </Link>
         </p>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
+import { QuevexLogo } from "./QuevexLogo";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -23,7 +24,7 @@ const Register = () => {
       });
 
       // Auto-login by saving registration payload directly to state tracking storage
-      localStorage.setItem("Projexis_user", JSON.stringify(response.data));
+      localStorage.setItem("Quevex_user", JSON.stringify(response.data));
       navigate("/dashboard");
     } catch (err) {
       setError(
@@ -40,6 +41,7 @@ const Register = () => {
     <div
       style={{
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
@@ -47,6 +49,9 @@ const Register = () => {
         fontFamily: "sans-serif",
       }}
     >
+      <div style={{ marginBottom: "40px" }}>
+        <QuevexLogo size={140} />
+      </div>
       <div
         style={{
           backgroundColor: "#ffffff",
@@ -66,7 +71,7 @@ const Register = () => {
             fontSize: "1.75rem",
           }}
         >
-          Projexis
+          Quevex
         </h2>
         <p
           style={{

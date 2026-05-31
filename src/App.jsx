@@ -11,7 +11,7 @@ import Login from "./components/Login";
 import Register from "./components/Registration";
 
 const ProtectedRoute = ({ children }) => {
-  const userSession = localStorage.getItem("Projexis_user");
+  const userSession = localStorage.getItem("Quevex_user");
   if (!userSession) return <Navigate to="/login" replace />;
   return children;
 };

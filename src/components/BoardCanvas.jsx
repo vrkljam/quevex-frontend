@@ -123,7 +123,7 @@ const BoardCanvas = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("Projexis_user");
+    localStorage.removeItem("Quevex_user");
     navigate("/login");
   };
 
@@ -194,7 +194,7 @@ const BoardCanvas = () => {
           color: "#1e293b",
         }}
       >
-        Loading Projexis Board Workspace...
+        Loading Quevex Board Workspace...
       </div>
     );
   }

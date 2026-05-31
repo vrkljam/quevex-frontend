@@ -7,7 +7,7 @@ const API = axios.create({
 // NEW CODE HERE: Auto-attach JWT Token to every single request header
 API.interceptors.request.use(
   (config) => {
-    const profile = localStorage.getItem("Projexis_user");
+    const profile = localStorage.getItem("Quevex_user");
 
     if (profile) {
       const { token } = JSON.parse(profile);
