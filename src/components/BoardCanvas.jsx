@@ -95,6 +95,16 @@ const BoardCanvas = () => {
       }),
     );
   };
+  const handleTitleUpdate = (cardId, newTitle) => {
+    setLists((prevLists) =>
+      prevLists.map((list) => ({
+        ...list,
+        cards: list.cards.map((card) =>
+          card._id === cardId ? { ...card, title: newTitle } : card,
+        ),
+      })),
+    );
+  };
 
   const handleCardUpdated = (updatedCard) => {
     setLists((prevLists) =>
@@ -331,6 +341,7 @@ const BoardCanvas = () => {
                 onCardAdded={handleCardAdded}
                 onClickCard={setActiveCard}
                 onListDeleted={handleListDeleted}
+                onTitleUpdate={handleTitleUpdate}
               />
             ))}
             <CreateListForm

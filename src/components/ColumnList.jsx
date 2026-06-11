@@ -4,11 +4,43 @@ import CardItem from "./CardItem";
 import CreateCardForm from "./CreateCardForm";
 import API from "../services/api";
 
-const ColumnList = ({ list, onCardAdded, onClickCard, onListDeleted }) => {
+// 8 UI-safe pastel accent colors
+const COLUMN_COLORS = [
+  "#FF6B6B", // red
+  "#FFB86B", // orange
+  "#FFD93D", // yellow
+  "#6BCB77", // green
+  "#4D96FF", // blue
+  "#6C63FF", // purple
+  "#FF6EC7", // pink
+  "#00C2A8", // teal
+];
+
+// deterministic color pick (stable per column)
+const getColumnColor = (id) => {
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = id.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return COLUMN_COLORS[Math.abs(hash) % COLUMN_COLORS.length];
+};
+
+const ColumnList = ({
+  list,
+  onCardAdded,
+  onClickCard,
+  onListDeleted,
+  onTitleUpdate,
+}) => {
+  const accent = getColumnColor(list._id);
+  const GLOW_STRENGTH = 14; // controls thickness feel
+
   return (
     <div
       className="column-wrapper"
       style={{
+        position: "relative",
+
         backgroundColor: "#ebecf0",
         width: "280px",
         borderRadius: "8px",
@@ -16,9 +48,35 @@ const ColumnList = ({ list, onCardAdded, onClickCard, onListDeleted }) => {
         maxHeight: "85vh",
         display: "flex",
         flexDirection: "column",
-        boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+        overflow: "hidden",
+
+        // LEFT GLOW EFFECT (key part)
+        boxShadow: `
+          inset 10px 0 ${GLOW_STRENGTH}px -8px ${accent},
+          0 4px 6px rgba(0,0,0,0.1)
+        `,
       }}
     >
+      {/* LEFT COLOR STRIP (gives crisp UI accent) */}
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          top: 0,
+          bottom: 0,
+          width: "10px",
+          background: `linear-gradient(
+            to bottom,
+            ${accent},
+            rgba(255,255,255,0.15)
+          )`,
+          // borderTopLeftRadius: "8px",
+          // borderBottomLeftRadius: "8px",
+          opacity: 1,
+          filter: "brightness(1.15)",
+        }}
+      />
+
       {/* Column Title Wrapper Row */}
       <div
         style={{
@@ -39,6 +97,7 @@ const ColumnList = ({ list, onCardAdded, onClickCard, onListDeleted }) => {
         >
           {list.title}
         </h3>
+
         <button
           onClick={async () => {
             if (
@@ -48,7 +107,7 @@ const ColumnList = ({ list, onCardAdded, onClickCard, onListDeleted }) => {
             ) {
               try {
                 await API.delete(`/lists/${list._id}`);
-                onListDeleted(list._id); // Inform the master state container to slice it out
+                onListDeleted(list._id);
               } catch (err) {
                 console.error("Failed to delete list column:", err);
                 alert("Could not delete column list.");
@@ -70,9 +129,7 @@ const ColumnList = ({ list, onCardAdded, onClickCard, onListDeleted }) => {
         </button>
       </div>
 
-      {/* The Droppable Container 
-        droppableId MUST match the unique database _id of this specific column list
-      */}
+      {/* Droppable */}
       <Droppable droppableId={list._id}>
         {(provided, snapshot) => (
           <div
@@ -81,27 +138,28 @@ const ColumnList = ({ list, onCardAdded, onClickCard, onListDeleted }) => {
             className="cards-list"
             style={{
               flexGrow: 1,
-              minHeight: "50px", // Ensures there is a drop zone even if the column is totally empty
+              minHeight: "50px",
               overflowY: "auto",
+
               backgroundColor: snapshot.isDraggingOver
-                ? "#dfe1e6"
+                ? "rgba(255,255,255,0.4)"
                 : "transparent",
+
               borderRadius: "4px",
               transition: "background-color 0.2s ease",
               padding: "4px",
             }}
           >
-            {/* Loop through and render the cards assigned to this list */}
             {list.cards?.map((card, index) => (
               <CardItem
                 key={card._id}
                 card={card}
                 index={index}
                 onClickCard={onClickCard}
+                onTitleUpdate={onTitleUpdate}
               />
             ))}
 
-            {/* Crucial placeholder element required by hello-pangea/dnd to reserve spatial gaps during drops */}
             {provided.placeholder}
           </div>
         )}
@@ -110,7 +168,6 @@ const ColumnList = ({ list, onCardAdded, onClickCard, onListDeleted }) => {
       <CreateCardForm
         listId={list._id}
         boardId={list.boardId}
-        // We will define this function in BoardCanvas next
         onCardAdded={onCardAdded}
       />
     </div>
