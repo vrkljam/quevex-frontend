@@ -58,6 +58,21 @@ const BoardCanvas = () => {
     }
   }, [showArchivePanel, boardId]);
 
+  // const handleListTitleUpdate = (listId, newTitle) => {
+  //   setBoardData((prev) => ({
+  //     ...prev,
+  //     lists: prev.lists.map((l) =>
+  //       l._id === listId ? { ...l, title: newTitle } : l,
+  //     ),
+  //   }));
+  // };
+
+  const handleListTitleUpdate = (listId, newTitle) => {
+    setLists((prevLists) =>
+      prevLists.map((l) => (l._id === listId ? { ...l, title: newTitle } : l)),
+    );
+  };
+
   // Handle Restoring an archived card back to life
   const handleRestoreCard = async (cardId) => {
     try {
@@ -342,6 +357,7 @@ const BoardCanvas = () => {
                 onClickCard={setActiveCard}
                 onListDeleted={handleListDeleted}
                 onTitleUpdate={handleTitleUpdate}
+                onListTitleUpdate={handleListTitleUpdate}
               />
             ))}
             <CreateListForm

@@ -1,8 +1,8 @@
-import React from "react";
 import { Droppable } from "@hello-pangea/dnd";
 import CardItem from "./CardItem";
 import CreateCardForm from "./CreateCardForm";
 import API from "../services/api";
+import { useState, useEffect } from "react";
 
 // 8 UI-safe pastel accent colors
 const COLUMN_COLORS = [
@@ -31,9 +31,71 @@ const ColumnList = ({
   onClickCard,
   onListDeleted,
   onTitleUpdate,
+  onListTitleUpdate,
 }) => {
   const accent = getColumnColor(list._id);
   const GLOW_STRENGTH = 14; // controls thickness feel
+
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [title, setTitle] = useState(list.title);
+  const [loading, setLoading] = useState(false);
+
+  const startEditing = () => {
+    setIsEditingTitle(true);
+  };
+
+  const cancelEditing = () => {
+    setTitle(list.title);
+    setIsEditingTitle(false);
+  };
+
+  const handleSave = async () => {
+    const trimmed = title.trim();
+
+    if (!trimmed || trimmed === list.title) {
+      cancelEditing();
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await API.put(`/lists/${list._id}`, {
+        title: trimmed,
+      });
+
+      // IMPORTANT: update parent state
+      // if (onTitleUpdate) {
+      //   onTitleUpdate(list._id, res.data.title);
+      // }
+
+      if (onListTitleUpdate) {
+        onListTitleUpdate(list._id, res.data.title);
+      }
+
+      setIsEditingTitle(false);
+    } catch (err) {
+      console.error("Failed to update column title:", err);
+      cancelEditing();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSave();
+    }
+
+    if (e.key === "Escape") {
+      cancelEditing();
+    }
+  };
+
+  useEffect(() => {
+    setTitle(list.title);
+  }, [list.title]);
 
   return (
     <div
@@ -95,7 +157,58 @@ const ColumnList = ({
             paddingLeft: "4px",
           }}
         >
-          {list.title}
+          {isEditingTitle ? (
+            <input
+              autoFocus
+              value={title}
+              disabled={loading}
+              onChange={(e) => setTitle(e.target.value)}
+              onBlur={handleSave}
+              onKeyDown={handleKeyDown}
+              style={{
+                width: "100%",
+                fontSize: "1.1rem",
+                fontWeight: "600",
+                padding: "4px",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+              }}
+            />
+          ) : (
+            <div
+              onDoubleClick={startEditing}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                cursor: "text",
+              }}
+            >
+              <span
+                style={{
+                  color: "#172b4d",
+                  fontSize: "1.1rem",
+                  fontWeight: "600",
+                }}
+              >
+                {list.title}
+              </span>
+
+              <span
+                onClick={startEditing}
+                style={{
+                  fontSize: "0.9rem",
+                  opacity: 0.5,
+                  cursor: "pointer",
+                  transition: "opacity 0.2s ease",
+                }}
+                onMouseEnter={(e) => (e.target.style.opacity = 1)}
+                onMouseLeave={(e) => (e.target.style.opacity = 0.5)}
+              >
+                ✏️
+              </span>
+            </div>
+          )}
         </h3>
 
         <button
