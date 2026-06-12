@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
 import { QuevexLogo } from "./QuevexLogo";
+// 1. Import the eye icons from lucide-react
+import { Eye, EyeOff } from "lucide-react";
+import "../App.css"; // Import the external CSS sheet here
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  // 2. State to track password visibility
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -26,170 +31,74 @@ const Login = () => {
     }
   };
 
+  // 3. Toggle helper function
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column", // Stack elements vertically
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-        backgroundColor: "#f4f5f7",
-        fontFamily: "sans-serif",
-        padding: "20px",
-      }}
-    >
+    <div className="auth-container">
       {/* 1. Logo at the Top */}
-      <div style={{ marginBottom: "40px" }}>
+      <div className="auth-logo-wrapper">
         <QuevexLogo size={140} />
       </div>
 
       {/* 2. Login Form Card */}
-      <div
-        style={{
-          backgroundColor: "#ffffff",
-          padding: "40px",
-          borderRadius: "8px",
-          boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
-          width: "100%",
-          maxWidth: "400px",
-          boxSizing: "border-box",
-        }}
-      >
-        <h2
-          style={{
-            textAlign: "center",
-            color: "#172b4d",
-            marginBottom: "8px",
-            fontSize: "1.75rem",
-          }}
-        >
-          Welcome Back
-        </h2>
-        <p
-          style={{
-            textAlign: "center",
-            color: "#5e6c84",
-            fontSize: "0.9rem",
-            marginBottom: "24px",
-          }}
-        >
-          Log in to your Quevex workspace
-        </p>
+      <div className="auth-card">
+        <h2 className="auth-title">Welcome Back</h2>
+        <p className="auth-subtitle">Log in to your Quevex workspace</p>
 
-        {error && (
-          <div
-            style={{
-              backgroundColor: "#ffebe6",
-              color: "#bf2600",
-              padding: "10px",
-              borderRadius: "4px",
-              fontSize: "0.85rem",
-              marginBottom: "16px",
-              border: "1px solid #ffbdad",
-            }}
-          >
-            {error}
-          </div>
-        )}
+        {error && <div className="auth-error">{error}</div>}
 
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: "16px" }}>
-            <label
-              style={{
-                display: "block",
-                color: "#5e6c84",
-                fontSize: "0.85rem",
-                fontWeight: "600",
-                marginBottom: "6px",
-              }}
-            >
-              Email Address
-            </label>
+          <div className="auth-form-group">
+            <label className="auth-label">Email Address</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="alex@example.com"
-              style={{
-                width: "100%",
-                padding: "10px",
-                borderRadius: "4px",
-                border: "1px solid #dfe1e6",
-                boxSizing: "border-box",
-                fontSize: "0.95rem",
-                outline: "none",
-              }}
+              className="auth-input"
             />
           </div>
 
-          <div style={{ marginBottom: "24px" }}>
-            <label
-              style={{
-                display: "block",
-                color: "#5e6c84",
-                fontSize: "0.85rem",
-                fontWeight: "600",
-                marginBottom: "6px",
-              }}
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="••••••••"
-              style={{
-                width: "100%",
-                padding: "10px",
-                borderRadius: "4px",
-                border: "1px solid #dfe1e6",
-                boxSizing: "border-box",
-                fontSize: "0.95rem",
-                outline: "none",
-              }}
-            />
+          <div className="auth-form-group password-group">
+            <label className="auth-label">Password</label>
+            {/* 4. Relative wrapper container houses both input and eye icon button */}
+            <div style={{ position: "relative" }}>
+              <input
+                // 5. Dynamic type field switches between text and password
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="••••••••"
+                className="auth-input password-input"
+              />
+              {/* 7. Icon Button positioned neatly overlaying the right side of the input */}
+              <button
+                type="button" // 8. Keeps the button from triggering a premature form submit
+                onClick={togglePasswordVisibility}
+                className="auth-input password-input"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            style={{
-              width: "100%",
-              backgroundColor: "#519839",
-              color: "#ffffff",
-              padding: "12px",
-              border: "none",
-              borderRadius: "4px",
-              fontSize: "1rem",
-              fontWeight: "600",
-              cursor: "pointer",
-            }}
+            className="auth-submit-btn login-btn"
           >
             {loading ? "Verifying..." : "Log In"}
           </button>
         </form>
 
-        <p
-          style={{
-            textAlign: "center",
-            marginTop: "24px",
-            fontSize: "0.85rem",
-            color: "#5e6c84",
-          }}
-        >
+        <p className="auth-footer-text">
           New to Quevex?{" "}
-          <Link
-            to="/register"
-            style={{
-              color: "#0079bf",
-              textDecoration: "none",
-              fontWeight: "600",
-            }}
-          >
+          <Link to="/register" className="auth-link">
             Create an account
           </Link>
         </p>
