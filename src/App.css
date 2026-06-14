@@ -203,7 +203,7 @@
 .auth-card {
   background-color: #ffffff;
   padding: 40px;
-  borderradius: 8px; /* Note: standard CSS uses a hyphen instead of camelCase */
+  border-radius: 8px; /* Note: standard CSS uses a hyphen instead of camelCase */
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -328,4 +328,136 @@
   color: #0079bf;
   text-decoration: none;
   font-weight: 600;
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.column-title {
+  color: #172b4d;
+  font-size: 1.1rem;
+  font-weight: 600;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  max-width: 220px;
+}
+
+/* ==========================================
+   COLUMN LIST
+========================================== */
+
+.column-wrapper {
+  position: relative;
+
+  background-color: #ebecf0;
+
+  width: 320px;
+  min-width: 320px;
+
+  border-radius: 8px;
+  padding: 12px;
+
+  max-height: 85vh;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+.column-accent {
+  position: absolute;
+
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 12px;
+
+  opacity: 1;
+  filter: brightness(1.15);
+}
+
+.column-title-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: text;
+
+  flex: 1;
+  min-width: 0;
+}
+
+.column-title-wrapper {
+  margin: 0;
+  padding-left: 4px;
+
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #172b4d;
+
+  flex: 1;
+  min-width: 0;
+}
+
+.column-title-input {
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: 600;
+
+  padding: 4px;
+
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.column-edit-icon {
+  font-size: 0.9rem;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.column-edit-icon:hover {
+  opacity: 1;
+}
+
+.column-delete-btn {
+  background: none;
+  border: none;
+
+  color: #6b778c;
+
+  cursor: pointer;
+
+  font-size: 1rem;
+
+  padding: 4px 8px;
+
+  transition: color 0.2s ease;
+}
+
+.column-delete-btn:hover {
+  color: #eb5a46;
+}
+
+.cards-list {
+  flex-grow: 1;
+
+  min-height: 50px;
+
+  overflow-y: auto;
+
+  border-radius: 4px;
+
+  transition: background-color 0.2s ease;
+
+  padding: 4px;
 }

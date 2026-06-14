@@ -147,6 +147,61 @@ const Dashboard = () => {
         </p>
       )}
 
+      {/* Welcome / How To Use */}
+      <div
+        style={{
+          background: "#ffffff",
+          padding: "24px 30px",
+          borderRadius: "12px",
+          marginBottom: "32px",
+          border: "1px solid #e2e8f0",
+          boxShadow: "0 4px 6px rgba(0,0,0,0.05)",
+        }}
+      >
+        <h2
+          style={{
+            marginTop: 0,
+            marginBottom: "12px",
+            color: "#0f172a",
+            fontSize: "1.5rem",
+            fontWeight: "700",
+          }}
+        >
+          Welcome to Quevex
+        </h2>
+
+        <p style={{ marginBottom: "12px", color: "#475569" }}>
+          Quevex helps you organize projects, tasks, and workflows using
+          customizable boards, columns, and cards.
+        </p>
+
+        <ul
+          style={{
+            margin: 0,
+            // paddingLeft: "20px",
+            color: "#334155",
+            lineHeight: "1.7",
+            textAlign: "left",
+          }}
+        >
+          <li>Create a workspace for a project, team, or area of work.</li>
+          <li>
+            In the workspace, add the columns you need, such as: Backlog, To Do,
+            In Progress, and Completed.
+          </li>
+          <li>
+            In each column you can create cards to track tasks, ideas, bugs, or
+            reminders.
+          </li>
+          <li>Drag and drop cards to different columns as needed.</li>
+          <li>
+            Double-click card or column titles to rename them, and a
+            description, color code, or even archive them.
+          </li>
+          <li>Archive completed work to keep your boards organized.</li>
+        </ul>
+      </div>
+
       {/* Main Split Layout */}
       <div
         style={{
@@ -229,6 +284,7 @@ const Dashboard = () => {
           >
             Your Project Boards
           </h2>
+
           {boards.length === 0 ? (
             <p
               style={{

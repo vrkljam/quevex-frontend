@@ -5,6 +5,7 @@ import ColumnList from "./ColumnList";
 import CreateListForm from "./CreateListForm";
 import CardModal from "./CardModal";
 import { useNavigate, useParams } from "react-router-dom";
+import QuevexLoader from "./QuevexLoader";
 
 const BoardCanvas = () => {
   const { boardId } = useParams();
@@ -211,15 +212,14 @@ const BoardCanvas = () => {
     return (
       <div
         style={{
-          padding: "40px",
-          fontFamily: "system-ui, sans-serif",
-          fontSize: "1.2rem",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
           background: "#f8fafc",
-          minHeight: "100vh",
-          color: "#1e293b",
         }}
       >
-        Loading Quevex Board Workspace...
+        <QuevexLoader />
       </div>
     );
   }
