@@ -64,11 +64,6 @@ const ColumnList = ({
         title: trimmed,
       });
 
-      // IMPORTANT: update parent state
-      // if (onTitleUpdate) {
-      //   onTitleUpdate(list._id, res.data.title);
-      // }
-
       if (onListTitleUpdate) {
         onListTitleUpdate(list._id, res.data.title);
       }
@@ -101,17 +96,6 @@ const ColumnList = ({
     <div
       className="column-wrapper"
       style={{
-        position: "relative",
-
-        backgroundColor: "#ebecf0",
-        width: "280px",
-        borderRadius: "8px",
-        padding: "12px",
-        maxHeight: "85vh",
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-
         // LEFT GLOW EFFECT (key part)
         boxShadow: `
           inset 10px 0 ${GLOW_STRENGTH}px -8px ${accent},
@@ -121,42 +105,18 @@ const ColumnList = ({
     >
       {/* LEFT COLOR STRIP (gives crisp UI accent) */}
       <div
+        className="column-accent"
         style={{
-          position: "absolute",
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: "10px",
-          background: `linear-gradient(
-            to bottom,
+          background: `linear-gradient(to bottom,
             ${accent},
             rgba(255,255,255,0.15)
           )`,
-          // borderTopLeftRadius: "8px",
-          // borderBottomLeftRadius: "8px",
-          opacity: 1,
-          filter: "brightness(1.15)",
         }}
       />
 
       {/* Column Title Wrapper Row */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "12px",
-        }}
-      >
-        <h3
-          style={{
-            margin: 0,
-            color: "#172b4d",
-            fontSize: "1.1rem",
-            fontWeight: "600",
-            paddingLeft: "4px",
-          }}
-        >
+      <div className="column-header">
+        <h3 className="column-title-wrapper">
           {isEditingTitle ? (
             <input
               autoFocus
@@ -165,45 +125,22 @@ const ColumnList = ({
               onChange={(e) => setTitle(e.target.value)}
               onBlur={handleSave}
               onKeyDown={handleKeyDown}
-              style={{
-                width: "100%",
-                fontSize: "1.1rem",
-                fontWeight: "600",
-                padding: "4px",
-                borderRadius: "4px",
-                border: "1px solid #ccc",
-              }}
+              className="column-title-input"
             />
           ) : (
             <div
               onDoubleClick={startEditing}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                cursor: "text",
-              }}
+              className="column-title-container"
             >
-              <span
-                style={{
-                  color: "#172b4d",
-                  fontSize: "1.1rem",
-                  fontWeight: "600",
-                }}
-              >
+              <span className="column-title" title={list.title}>
                 {list.title}
               </span>
 
               <span
                 onClick={startEditing}
-                style={{
-                  fontSize: "0.9rem",
-                  opacity: 0.5,
-                  cursor: "pointer",
-                  transition: "opacity 0.2s ease",
-                }}
-                onMouseEnter={(e) => (e.target.style.opacity = 1)}
-                onMouseLeave={(e) => (e.target.style.opacity = 0.5)}
+                className="column-edit-icon"
+                // onMouseEnter={(e) => (e.target.style.opacity = 1)}
+                // onMouseLeave={(e) => (e.target.style.opacity = 0.5)}
               >
                 ✏️
               </span>
@@ -227,16 +164,9 @@ const ColumnList = ({
               }
             }
           }}
-          style={{
-            background: "none",
-            border: "none",
-            color: "#6b778c",
-            cursor: "pointer",
-            fontSize: "1rem",
-            padding: "4px 8px",
-          }}
-          onMouseEnter={(e) => (e.target.style.color = "#eb5a46")}
-          onMouseLeave={(e) => (e.target.style.color = "#6b778c")}
+          className="column-delete-btn"
+          // onMouseEnter={(e) => (e.target.style.color = "#eb5a46")}
+          // onMouseLeave={(e) => (e.target.style.color = "#6b778c")}
         >
           ✕
         </button>
@@ -250,17 +180,9 @@ const ColumnList = ({
             {...provided.droppableProps}
             className="cards-list"
             style={{
-              flexGrow: 1,
-              minHeight: "50px",
-              overflowY: "auto",
-
               backgroundColor: snapshot.isDraggingOver
                 ? "rgba(255,255,255,0.4)"
                 : "transparent",
-
-              borderRadius: "4px",
-              transition: "background-color 0.2s ease",
-              padding: "4px",
             }}
           >
             {list.cards?.map((card, index) => (
